@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlayFDroid 🎮 Classic Open-Source Android Games</title>
+  <meta name="description" content="Official F-Droid repository and website for PlayFDroid. Classic and open-source Android games revived and modernized for modern devices.">
+  <link rel="icon" type="image/png" href="assets/replica-island-icon.png">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg-card: #161b22;
+      --bg-card-hover: #1f242c;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #238636;
+      --accent-hover: #2ea043;
+      --primary: #58a6ff;
+      --primary-hover: #79c0ff;
+      --tag-bg: #21262d;
+      --tag-border: #363b42;
+      --code-bg: #0d1117;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="light"] {
+      --bg: #f6f8fa;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f3f4f6;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --text-muted: #656d76;
+      --accent: #1a7f37;
+      --accent-hover: #2da44e;
+      --primary: #0969da;
+      --primary-hover: #218bff;
+      --tag-bg: #eff1f3;
+      --tag-border: #d0d7de;
+      --code-bg: #f6f8fa;
+      --shadow: 0 10px 30px rgba(140, 149, 159, 0.2);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    a { color: var(--primary); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--primary-hover); text-decoration: underline; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+    /* Nav */
+    header {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    .nav-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; align-items: center; gap: 20px; }
+    .nav-links a { color: var(--text-muted); font-size: 0.95rem; font-weight: 500; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .btn-toggle {
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 70px 0 50px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(88, 166, 255, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 32px;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s, background-color 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); text-decoration: none; }
+    .btn-accent { background: var(--accent); color: #fff; }
+    .btn-accent:hover { background: var(--accent-hover); color: #fff; }
+    .btn-secondary { background: var(--bg-card); border: 1px solid var(--border); color: var(--text); }
+    .btn-secondary:hover { background: var(--bg-card-hover); }
+
+    /* Setup / How to add */
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .section-desc {
+      text-align: center;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto 40px;
+    }
+
+    .setup-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 32px;
+      align-items: center;
+      margin-bottom: 70px;
+    }
+    .setup-content h3 { font-size: 1.4rem; margin-bottom: 12px; }
+    .setup-steps { list-style: none; counter-reset: steps; margin-bottom: 24px; }
+    .setup-steps li {
+      counter-increment: steps;
+      margin-bottom: 16px;
+      position: relative;
+      padding-left: 36px;
+      font-size: 0.95rem;
+    }
+    .setup-steps li::before {
+      content: counter(steps);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 24px;
+      height: 24px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .copy-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 8px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: monospace;
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
+    .copy-btn {
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      margin-left: 10px;
+    }
+    .copy-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .qr-card {
+      text-align: center;
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .qr-card img { width: 100%; max-width: 220px; height: auto; display: block; margin: 0 auto; }
+    .qr-card span { display: block; color: #1f2328; font-size: 0.8rem; font-weight: 600; margin-top: 8px; }
+
+    /* Catalog */
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 30px;
+      margin-bottom: 70px;
+    }
+    .game-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .game-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .game-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 24px 24px 16px;
+    }
+    .game-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: #000;
+      padding: 4px;
+      border: 1px solid var(--border);
+      object-fit: contain;
+    }
+    .game-title h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+    .game-author { font-size: 0.85rem; color: var(--text-muted); }
+    .game-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 24px 16px;
+    }
+    .tag {
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .tag-category { color: var(--primary); border-color: rgba(88, 166, 255, 0.4); }
+    .game-desc {
+      padding: 0 24px 20px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      flex-grow: 1;
+    }
+    .game-screens {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 0 24px 20px;
+    }
+    .game-screens img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .game-footer {
+      border-top: 1px solid var(--border);
+      padding: 16px 24px;
+      background: rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* Contact */
+    .contact-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      text-align: center;
+      margin-bottom: 70px;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 0;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 800px) {
+      .setup-box { grid-template-columns: 1fr; }
+      .catalog-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <div class="container nav-wrap">
+      <a href="#" class="brand">
+        <span>🎮</span>
+        <span>PlayFDroid</span>
+      </a>
+      <div class="nav-links">
+        <a href="#games">Games</a>
+        <a href="#add-repo">Add Repository</a>
+        <a href="#contact">Contact</a>
+        <button class="btn-toggle" id="themeToggle" aria-label="Toggle Theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-badge">F-Droid Game Repository</div>
+      <h1>Classic Open-Source Games on Modern Android</h1>
+      <p>
+        An independent F-Droid repository dedicated to revived and optimized open-source games, modernized to run smoothly on contemporary Android devices.
+      </p>
+      <div class="hero-actions">
+        <a href="fdroidrepos://raw.githubusercontent.com/PlayFDroid/fdroid-repo/gh-pages/fdroid/repo?fingerprint=077873B95749B78FA46971CC117F6F6086639D785208F0DDF3DA2143CB1E8DDD" class="btn btn-accent">
+          <span>📲</span>
+          <span>Add to F-Droid (One-Click)</span>
+        </a>
+        <a href="#games" class="btn btn-secondary">
+          <span>🕹️</span>
+          <span>Browse Games</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- How to add to F-Droid -->
+    <section id="add-repo">
+      <h2 class="section-title">How to Add to F-Droid</h2>
+      <p class="section-desc">Add the repository to your favorite F-Droid client on your Android device.</p>
+
+      <div class="setup-box">
+        <div class="setup-content">
+          <h3>Method 1: One-Click (From Device)</h3>
+          <p style="color: var(--text-muted); margin-bottom: 16px;">
+            If you have <strong>F-Droid</strong>, <strong>Droid-ify</strong>, or <strong>Neo Store</strong> installed, tap below:
+          </p>
+          <a href="fdroidrepos://raw.githubusercontent.com/PlayFDroid/fdroid-repo/gh-pages/fdroid/repo?fingerprint=077873B95749B78FA46971CC117F6F6086639D785208F0DDF3DA2143CB1E8DDD" class="btn btn-accent" style="margin-bottom: 24px;">
+            <span>➕</span>
+            <span>Open in F-Droid Client</span>
+          </a>
+
+          <h3>Method 2: Manual Add in Settings</h3>
+          <ol class="setup-steps">
+            <li>Open <strong>F-Droid</strong> ➔ <strong>Settings</strong> ➔ <strong>Repositories</strong> ➔ tap <strong>+ (Add)</strong>.</li>
+            <li>
+              <span>Paste the Repository URL:</span>
+              <div class="copy-block">
+                <span id="repoUrl">https://raw.githubusercontent.com/PlayFDroid/fdroid-repo/gh-pages/fdroid/repo</span>
+                <button class="copy-btn" onclick="copyText('repoUrl', this)">Copy</button>
+              </div>
+            </li>
+            <li>
+              <span>Paste the Signing Fingerprint:</span>
+              <div class="copy-block">
+                <span id="repoFp">077873B95749B78FA46971CC117F6F6086639D785208F0DDF3DA2143CB1E8DDD</span>
+                <button class="copy-btn" onclick="copyText('repoFp', this)">Copy</button>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="qr-card">
+          <img src="qr.png" alt="QR Code F-Droid Repo">
+          <span>Scan with camera or in F-Droid</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Catalog -->
+    <section id="games">
+      <h2 class="section-title">Games in Repository</h2>
+      <p class="section-desc">All games are packaged and maintained in the repository.</p>
+
+      <div class="catalog-grid">
+
+        <!-- Enigma Card -->
+        <div class="game-card">
+          <div class="game-header">
+            <img src="assets/enigma-icon.png" class="game-icon" alt="Enigma Icon">
+            <div class="game-title">
+              <h3>Enigma (Revived)</h3>
+              <div class="game-author">Daniel Heck &amp; SeeSchloss • GPL-2.0-or-later</div>
+            </div>
+          </div>
+          <div class="game-tags">
+            <span class="tag tag-category">Puzzle Game</span>
+            <span class="tag">64-bit ARM64</span>
+            <span class="tag">Android 14+</span>
+            <span class="tag">Gyroscope + Touch</span>
+            <span class="tag">1000+ Levels</span>
+          </div>
+          <div class="game-desc">
+            Classic marble-rolling puzzle game inspired by Oxyd and Marble Madness. Navigate through traps, lasers, portals, and moving terrain to uncover matching stones. Features a modernized Lua engine, ARM64 support, and gesture controls.
+          </div>
+          <div class="game-screens">
+            <img src="assets/enigma-menu.webp" alt="Enigma Menu">
+            <img src="assets/enigma-game.webp" alt="Enigma Gameplay">
+          </div>
+          <div class="game-footer">
+            <a href="https://github.com/PlayFDroid/enigma-android" target="_blank" rel="noopener">💻 GitHub Repository</a>
+            <a href="https://github.com/PlayFDroid/enigma-android/releases" target="_blank" rel="noopener" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem;">Download APK</a>
+          </div>
+        </div>
+
+        <!-- Replica Island Card -->
+        <div class="game-card">
+          <div class="game-header">
+            <img src="assets/replica-island-icon.png" class="game-icon" alt="Replica Island Icon">
+            <div class="game-title">
+              <h3>Replica Island</h3>
+              <div class="game-author">Chris Pruett &amp; Genki Mine • Apache-2.0</div>
+            </div>
+          </div>
+          <div class="game-tags">
+            <span class="tag tag-category">Platformer Game</span>
+            <span class="tag tag-category">Action Game</span>
+            <span class="tag">SDK 35 (Android 15+)</span>
+            <span class="tag">Rotation Vector</span>
+            <span class="tag">Dual Tilt/Touch</span>
+          </div>
+          <div class="game-desc">
+            Classic 2D side-scrolling platformer starring the Android robot! Explore 40 levels with secret paths, boss fights, enemy possession mechanics, and multiple endings. Modernized with Game Rotation Vector tilt controls, locked widescreen orientation, and Gradle 8.
+          </div>
+          <div class="game-screens">
+            <img src="assets/replica-game.webp" alt="Replica Island Gameplay (Beach Level)">
+            <img src="assets/replica-dialog.webp" alt="Replica Island Gameplay (Forest Level)">
+          </div>
+          <div class="game-footer">
+            <a href="https://github.com/PlayFDroid/replica-island" target="_blank" rel="noopener">💻 GitHub Repository</a>
+            <a href="https://github.com/PlayFDroid/replica-island/releases" target="_blank" rel="noopener" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem;">Download APK</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contact & Contribute -->
+    <section id="contact">
+      <div class="contact-box">
+        <h2 style="font-size: 1.8rem; margin-bottom: 12px;">Contact &amp; Contribute</h2>
+        <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 16px;">
+          Have a classic game you would like to see revived for modern Android, or found an issue? Join the project or get in touch on GitHub.
+        </p>
+        <div class="contact-links">
+          <a href="https://github.com/PlayFDroid" target="_blank" rel="noopener" class="btn btn-secondary">
+            <span>🏢</span> PlayFDroid Organization
+          </a>
+          <a href="https://github.com/PlayFDroid/fdroid-repo/issues" target="_blank" rel="noopener" class="btn btn-secondary">
+            <span>💡</span> Suggest Game / Report Issue
+          </a>
+          <a href="https://github.com/IntinteDAO" target="_blank" rel="noopener" class="btn btn-secondary">
+            <span>👤</span> Maintainer Profile (IntinteDAO)
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>PlayFDroid • Open-Source Game Repository for Android</p>
+    </div>
+  </footer>
+
+  <script>
+    // Copy helper
+    function copyText(elementId, button) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = button.innerText;
+        button.innerText = '✓ Copied!';
+        button.style.backgroundColor = 'var(--accent)';
+        button.style.color = '#fff';
+        setTimeout(() => {
+          button.innerText = originalText;
+          button.style.backgroundColor = '';
+          button.style.color = '';
+        }, 2000);
+      });
+    }
+
+    // Theme toggle
+    const themeBtn = document.getElementById('themeToggle');
+    let currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', currentTheme);
+
+    themeBtn.addEventListener('click', () => {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      localStorage.setItem('theme', currentTheme);
+    });
+  </script>
+</body>
+</html>
