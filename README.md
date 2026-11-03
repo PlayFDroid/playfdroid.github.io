@@ -12,6 +12,9 @@ PlayFDroid is a decentralized, 100% GitHub-hosted F-Droid repository dedicated t
 ### Current Catalog:
 - **Enigma (Revived)** – Marble-rolling puzzle game (GPLv2+)
 - **Replica Island** – 2D platformer starring the Android robot (Apache-2.0)
+- **OpenArena** – Fast-paced 3D multiplayer first-person shooter (GPL-2.0)
+- **Tanks of Freedom** – Isometric turn-based tactical strategy game (MIT)
+- **SuperTux Advance** – Retro 2D platformer running on Brux GDK (GPL-3.0)
 
 ---
 
